@@ -32,7 +32,7 @@ window.addEventListener('message', function receiveMessage(e) {
                     msg2.statuscode = 200;
                     try {
                         msg2.data = JSON.parse(xmlhttp.responseText);
-                        msg.result = 'ok';
+                        msg2.result = 'ok';
                     } 
                     catch (e) {
                         msg2.statuscode = 400;
