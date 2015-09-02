@@ -49,10 +49,16 @@
     }, false);
     
     function create(loaderurl) {
-        var url = new URL(loaderurl);
-        var origin = url.protocol + "//" + url.hostname + 
-        (url.port ? ':' + url.port : '');
-        var path = url.pathname;
+        var parser = document.createElement('a');
+        parser.href = loaderurl;
+        var origin = parser.protocol + '//' + parser.host;
+        var path = parser.pathname;
+
+//         var url = new URL(loaderurl);
+//         var origin = url.protocol + "//" + url.hostname + 
+//         (url.port ? ':' + url.port : '');
+//         var path = url.pathname;
+        
         var remote = remotes[origin];
         if (remote)
             return remote;
