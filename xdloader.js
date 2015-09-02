@@ -46,6 +46,19 @@
         }
     }, false);
     
+    function create(loaderurl) {
+        var url = new URL(loaderurl);
+        var origin = url.protocol + "//" + url.hostname + 
+        (url.port ? ':' + url.port : '');
+        var path = url.pathname;
+        var remote = remotes[origin];
+        if (remote)
+            return remote;
+        remote = new Remote(origin, path);
+        remotes[origin] = remote;
+        return remote.deferred;
+    }
+
     function Remote(origin, path) {
         
         this.deferred = $.Deferred();
@@ -82,18 +95,5 @@
         }
     }
     
-    function create(loaderurl) {
-        var url = new URL(loaderurl);
-        var origin = url.protocol + "//" + url.hostname + 
-        (url.port ? ':' + url.port : '');
-        var path = url.pathname;
-        var remote = remotes[origin];
-        if (remote)
-            return remote;
-        remote = new Remote(origin, path);
-        remotes[origin] = remote;
-        return remote.deferred;
-    }
-
 }));
 
