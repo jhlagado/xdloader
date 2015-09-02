@@ -9,7 +9,7 @@
     <script src="xdloader.js"></script>
     <script>
         xdloader.create('file:///home/jh/work/xdloader/remote/xdremote.html').done(function(remote) {
-            remote.load('resource.json').done(function(data) {
+            remote.load('resource1.json').done(function(data) {
                 console.log('RESULT', data.message)
             }).fail(function(error){
                 console.log('FAILED!!!', error)
