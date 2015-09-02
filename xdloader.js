@@ -51,14 +51,10 @@
     function create(loaderurl) {
         var parser = document.createElement('a');
         parser.href = loaderurl;
-        var origin = parser.protocol + '//' + parser.host;
+        var origin = parser.protocol + '//' + parser.hostname;
         var path = parser.pathname;
+        if (path[0] != '/') path = '/' + path;
 
-//         var url = new URL(loaderurl);
-//         var origin = url.protocol + "//" + url.hostname + 
-//         (url.port ? ':' + url.port : '');
-//         var path = url.pathname;
-        
         var remote = remotes[origin];
         if (remote)
             return remote;
@@ -104,4 +100,3 @@
     }
 
 }));
-
