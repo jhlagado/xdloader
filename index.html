@@ -5,16 +5,95 @@
     <title>xdloader client</title>
 </head>
 <body>
+    <div id="output" style="white-space:pre;"></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="xdloader.js"></script>
     <script>
-        xdloader.create('file:///home/jh/work/xdloader/remote/xdremote.html').done(function(remote) {
-            remote.load('resource1.json').done(function(data) {
-                console.log('RESULT', data.message)
-            }).fail(function(error){
-                console.log('FAILED!!!', error)
-            }); 
+    $(function(){
+        xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html').done(function(remote) {
+
+            var failcount = 0;
+            var results = [];
+
+            var tests = [
+                {url: 'resource1.json', expect: 'Hello, Breakfast!'},
+                {url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
+                {url: 'resource3.json', expect: null},
+            ]
+            
+            tests.forEach(function(test){
+                perform(test)
+            })
+
+            function perform(test){
+                return remote.load(test.url).done(function(data) {
+
+                    report(test, data.message);
+
+                }).fail(function(error){
+
+                    report(test, undefined);
+                }); 
+            }
+
+            function report(test, text) {
+                var result = {};
+
+                if (test.expect) {
+                    result.expected = 'expect text load';
+                    result.got = text;
+                    if (test.expect == text) {
+                        result.passed = true;
+                    }
+                    else {
+                        result.passed = false;
+                        result.reason = (text == null) ? 'load failed' : 'no match';
+                    }
+                }
+                else {
+                    result.expected = 'expect no load';
+                    if (text == null) {
+                        result.got = 'no load';
+                        result.passed = true;
+                    }
+                    else {
+                        result.got = 'loaded';
+                        result.passed = false;
+                    }
+                }
+
+                if (!result.passed) failcount++;
+                test.result = result;
+                    
+                $('#output').text('');
+                tests.forEach(function(test){
+                    printResult(test)
+                })
+                print('\n');
+                if (failcount) {
+                    print('Failures:' + failcount)
+                }
+                else {
+                    print('Success!!');
+                }
+            }
+
+            function printResult(test){
+                if (!test.result) return;
+                print('\n"' + test.url + '"')
+                print('expected: ' + test.result.expected)
+                print('got: ' + test.result.got)
+                print('passed: ' + test.result.passed)
+                if (test.result.reason) print('reason: ' + test.result.reason)
+            }
+
+            function print(text){
+                var output = $('#output').text();
+                $('#output').text(output + text + '\n')
+            }
+
         })
+    })
     </script>
 </body>
 </html>
