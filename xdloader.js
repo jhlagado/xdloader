@@ -37,11 +37,13 @@
             }
         } 
         else if (msg.name == 'load.response') {
-            if (msg.result == 'ok') {
-                var rc = deferreds[msg.path];
-                deferreds[msg.path] = null;
-                if (rc)
+            var rc = deferreds[msg.path];
+            deferreds[msg.path] = null;
+            if (rc) {
+                if (msg.result == 'ok')
                     rc.resolve(msg.data);
+                else
+                    rc.reject(msg.result);
             }
         }
     }, false);
@@ -58,11 +60,11 @@
         remotes[origin] = remote;
         return remote.deferred;
     }
-
+    
     function Remote(origin, path) {
         
         this.deferred = $.Deferred();
-
+        
         var element = document.createElement('iframe');
         element.src = origin + path;
         element.width = '1';
@@ -94,6 +96,6 @@
             remotes[origin] = null;
         }
     }
-    
+
 }));
 

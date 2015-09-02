@@ -8,11 +8,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="xdloader.js"></script>
     <script>
-        'use strict';
-
         xdloader.create('file:///home/jh/work/xdloader/remote/xdremote.html').done(function(remote) {
-            remote.load('resource.json').done(function(result) {
-                console.log('RESULT', result.message)
+            remote.load('resource.json').done(function(data) {
+                console.log('RESULT', data.message)
+            }).fail(function(error){
+                console.log('FAILED!!!', error)
             }); 
         })
     </script>
