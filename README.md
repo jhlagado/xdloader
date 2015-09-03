@@ -30,7 +30,6 @@ xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html')
             console.error('ERROR: ' + error);
 
         })
-
 }        
 
 
