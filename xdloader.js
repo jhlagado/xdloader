@@ -96,6 +96,14 @@
             }
         }, timeout);
         
+        this.get = function(path, json) {
+            return this.ajax('GET', path, null, json)
+        }
+
+        this.post = function(path, data, json) {
+            return this.ajax('POST', path, data, json)
+        }
+
         this.ajax = function(method, path, data, json) {
             if (!this.source)
                 return;
@@ -121,14 +129,6 @@
             return def.promise();
         }
         
-        this.get = function(path, json) {
-            return this.ajax('GET', path, null, json)
-        }
-
-        this.post = function(path, data, json) {
-            return this.ajax('POST', path, data, json)
-        }
-
         this.destroy = function() {
             body.removeElement(remote.element);
             remotes[origin] = null;

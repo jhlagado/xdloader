@@ -18,7 +18,7 @@ xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html')
 
 .done(function(remote) {
 
-    return remote.load('resource1.json')
+    return remote.get('resource1.json')
 
         .done(function(data) {
 
