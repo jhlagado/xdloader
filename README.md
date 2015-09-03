@@ -23,12 +23,10 @@ xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html')
         .done(function(data) {
 
             console.log(data.message);
-
         }
         .fail(function(error){
 
             console.error('ERROR: ' + error);
-
         })
 }        
 
