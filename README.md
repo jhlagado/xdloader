@@ -18,18 +18,14 @@ by your app. Once you have a remote you can ask it to load JSON files from that 
 
          xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
 
-        .done(function(remote) {
-
-            return remote.get('resource1.json')
             .done(function(response) {
 
-            console.log(data.message);
-        }
-        .fail(function(error){
-
-            console.error('ERROR: ' + error);
+                console.log(response.data.message);
             })
-        });
+            .fail(function(error){
+
+                console.log('ERROR: ' + error);
+            })
 
 
 See demo:
