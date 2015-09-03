@@ -20,10 +20,10 @@
         .done(function(remote) {
 
             var tests = [
-                {method: 'post', url: 'resource1.json', data:{a:1}, expect: 'Hello, Breakfast!'},
-//                 {method: 'get', url: 'resource1.json', expect: 'Hello, Breakfast!'},
-//                 {method: 'get', url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
-//                 {method: 'get', url: 'resource3.json', expect: null},
+                {method: 'post', url: 'resource1.json', data:{a:1}, expect: null},
+                {method: 'get', url: 'resource1.json', expect: 'Hello, Breakfast!'},
+                {method: 'get', url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
+                {method: 'get', url: 'resource3.json', expect: null},
             ]
             
             tests.forEach(function(test, index){
@@ -37,7 +37,9 @@
 
         function perform(remote, tests, test){
 
-            return remote.ajax(test.method, test.url, test.data).done(function(data) {
+            (test.method == 'get' ? remote.get(test.url) : remote.post(test.url, test.data))
+            
+            .done(function(data) {
 
                 reportajax(tests, test, data);
 
@@ -96,7 +98,7 @@
             if (!test.result) return;
 
             print('\n');
-            if (test.type == 'ajax') print('AJAX test method: ' + test.method);
+            print('AJAX method: ' + test.method);
             print('"' + test.url + '"')
             print('expected: ' + test.result.expected)
             print('got: ' + test.result.got)
