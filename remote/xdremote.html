@@ -17,10 +17,7 @@ window.addEventListener('load', function load(event) {
 window.addEventListener('message', function receiveMessage(e) {
     
     var msg = JSON.parse(e.data)
-    if (msg.command == 'load') {
-        loadrequest(msg);
-    }
-    else if (msg.command == 'ajax') {
+    if (msg.command == 'ajax') {
         ajaxrequest(msg);
     }
 
