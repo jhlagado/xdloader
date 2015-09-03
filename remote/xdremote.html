@@ -50,7 +50,11 @@ function ajaxrequest(msg){
         }
     }
     xmlhttp.open(msg.method || "GET", msg.path, true);
-    xmlhttp.send(msg.data || '');
+    var senddata = msg.data || '';
+    if (msg.json !== false) {
+        senddata = JSON.stringify(senddata);
+    }    
+    xmlhttp.send(senddata);
 }
 
 function postMsg(msg) {

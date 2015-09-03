@@ -20,9 +20,10 @@
         .done(function(remote) {
 
             var tests = [
-                {type: 'ajax', method: 'get', url: 'resource1.json', expect: 'Hello, Breakfast!'},
-                {type: 'ajax', method: 'get', url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
-                {type: 'ajax', method: 'get', url: 'resource3.json', expect: null},
+                {method: 'post', url: 'resource1.json', data:{a:1}, expect: 'Hello, Breakfast!'},
+//                 {method: 'get', url: 'resource1.json', expect: 'Hello, Breakfast!'},
+//                 {method: 'get', url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
+//                 {method: 'get', url: 'resource3.json', expect: null},
             ]
             
             tests.forEach(function(test, index){
@@ -36,7 +37,7 @@
 
         function perform(remote, tests, test){
 
-            return remote.ajax(test.method, test.url).done(function(data) {
+            return remote.ajax(test.method, test.url, test.data).done(function(data) {
 
                 reportajax(tests, test, data);
 
