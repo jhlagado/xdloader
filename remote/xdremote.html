@@ -50,10 +50,7 @@ function ajaxrequest(msg){
         }
     }
     xmlhttp.open(msg.method || "GET", msg.path, true);
-    try {
-        xmlhttp.send(msg.data || '');
-    }
-    catch (e) {}
+    xmlhttp.send(msg.data || '');
 }
 
 function postMsg(msg) {
