@@ -120,7 +120,7 @@
             return def.promise();
         }
         
-        this.ajax = function(method, path, data) {
+        this.ajax = function(method, path, data, headers) {
             if (!this.source)
                 return;
             var id = String(Date.now());    
@@ -128,14 +128,16 @@
             if (!def) {
                 def = $.Deferred();
                 deferreds[path1] = def;
-                var msg = JSON.stringify({
+                var msg = {
                     command: 'ajax',
                     id: id,
                     method: method,
                     path: path,
                     data: data,
-                });
-                this.source.postMessage(msg, origin);
+                };
+                if (headers) msg.headers = headers;
+                
+                this.source.postMessage(JSON.stringify(msg), origin);
             }
             return def.promise();
         }

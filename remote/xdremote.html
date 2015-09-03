@@ -18,38 +18,73 @@ window.addEventListener('message', function receiveMessage(e) {
     
     var msg = JSON.parse(e.data)
     if (msg.command == 'load') {
-        var msg2 = {
-            name: 'load.response',
-            path: msg.path,
-        };
-        
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() 
-        {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200 || xmlhttp.status == 0) {
-                    
-                    msg2.statuscode = 200;
-                    try {
-                        msg2.data = JSON.parse(xmlhttp.responseText);
-                        msg2.result = 'ok';
-                    } 
-                    catch (e) {
-                        msg2.statuscode = 400;
-                        msg2.result = e.message;
-                    }
-                } 
-                else {
-                    msg2.statuscode = xmlhttp.status;
-                    msg2.result = 'error';
-                }
-                postMsg(msg2, '*');
-            }
-        }
-        xmlhttp.open("GET", msg.path, true);
-        xmlhttp.send();
+        loadrequest(msg);
     }
+    else if (msg.command == 'ajax') {
+        ajaxrequest(msg);
+    }
+
 }, false);
+
+function ajaxrequest(msg){
+    var msg2 = {
+        id: msg.id,
+        name: 'ajax.response',
+        method: msg.method,
+        path: msg.path,
+    };
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() 
+    {
+        if (xmlhttp.readyState == 4) {
+            
+            msg2.status = xmlhttp.status;
+            msg2.statusText = xmlhttp.statusText;
+            
+            if (xmlhttp.status == 200 || xmlhttp.status == 0) {
+
+                msg2.responseText = xmlhttp.responseText;
+            } 
+            postMsg(msg2, '*');
+        }
+    }
+    xmlhttp.open(msg.method || "GET", msg.path, true);
+    xmlhttp.send(msg.data || '');
+}
+
+function loadrequest(msg){
+    var msg2 = {
+        name: 'load.response',
+        path: msg.path,
+    };
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() 
+    {
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 200 || xmlhttp.status == 0) {
+
+                msg2.statuscode = 200;
+                try {
+                    msg2.data = JSON.parse(xmlhttp.responseText);
+                    msg2.result = 'ok';
+                } 
+                catch (e) {
+                    msg2.statuscode = 400;
+                    msg2.result = e.message;
+                }
+            } 
+            else {
+                msg2.statuscode = xmlhttp.status;
+                msg2.result = 'error';
+            }
+            postMsg(msg2, '*');
+        }
+    }
+    xmlhttp.open("GET", msg.path, true);
+    xmlhttp.send();
+}
 
 function postMsg(msg) {
     window.parent.postMessage(JSON.stringify(msg), '*');
