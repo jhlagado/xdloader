@@ -53,39 +53,6 @@ function ajaxrequest(msg){
     xmlhttp.send(msg.data || '');
 }
 
-function loadrequest(msg){
-    var msg2 = {
-        name: 'load.response',
-        path: msg.path,
-    };
-
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() 
-    {
-        if (xmlhttp.readyState == 4) {
-            if (xmlhttp.status == 200 || xmlhttp.status == 0) {
-
-                msg2.statuscode = 200;
-                try {
-                    msg2.data = JSON.parse(xmlhttp.responseText);
-                    msg2.result = 'ok';
-                } 
-                catch (e) {
-                    msg2.statuscode = 400;
-                    msg2.result = e.message;
-                }
-            } 
-            else {
-                msg2.statuscode = xmlhttp.status;
-                msg2.result = 'error';
-            }
-            postMsg(msg2, '*');
-        }
-    }
-    xmlhttp.open("GET", msg.path, true);
-    xmlhttp.send();
-}
-
 function postMsg(msg) {
     window.parent.postMessage(JSON.stringify(msg), '*');
 }

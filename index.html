@@ -20,14 +20,13 @@
         .done(function(remote) {
 
             var tests = [
-                {url: 'resource1.json', expect: 'Hello, Breakfast!'},
-                {url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
-                {url: 'resource3.json', expect: null},
                 {type: 'ajax', method: 'get', url: 'resource1.json', expect: 'Hello, Breakfast!'},
+                {type: 'ajax', method: 'get', url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
+                {type: 'ajax', method: 'get', url: 'resource3.json', expect: null},
             ]
             
             tests.forEach(function(test, index){
-                perform(remote, tests, index, test)
+                perform(remote, tests, test)
             })
 
         })
@@ -35,37 +34,22 @@
             print(error);
         });
 
-        function perform(remote, tests, index){
+        function perform(remote, tests, test){
 
-            var test = tests[index];
-            
-            if (test.type == 'ajax') {
+            return remote.ajax(test.method, test.url).done(function(data) {
 
-                return remote.ajax(test.method, test.url).done(function(data) {
+                reportajax(tests, test, data);
 
-                    report(tests, index, data.message);
+            }).fail(function(error){
 
-                }).fail(function(error){
-
-                    report(tests, index, undefined);
-                }); 
-            }
-            else {
-
-                return remote.load(test.url).done(function(data) {
-
-                    report(tests, index, data.message);
-
-                }).fail(function(error){
-
-                    report(tests, index, undefined);
-                }); 
-            }
+                reportajax(tests, test, undefined);
+            }); 
         }
 
-        function report(tests, index, text) {
+        function reportajax(tests, test, response) {
 
-            var test = tests[index];
+            var text = response && response.data.message;
+
             var result = {};
 
             if (test.expect) {
@@ -109,7 +93,10 @@
 
         function printResult(test){
             if (!test.result) return;
-            print('\n"' + test.url + '"')
+
+            print('\n');
+            if (test.type == 'ajax') print('AJAX test method: ' + test.method);
+            print('"' + test.url + '"')
             print('expected: ' + test.result.expected)
             print('got: ' + test.result.got)
             print('passed: ' + test.result.passed)
