@@ -30,7 +30,7 @@ function ajaxrequest(msg){
     var msg2 = {
         id: msg.id,
         name: 'ajax.response',
-        method: msg.method,
+        method: msg.method.toUpperCase(),
         path: msg.path,
     };
 

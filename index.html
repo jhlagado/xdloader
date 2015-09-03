@@ -23,6 +23,7 @@
                 {url: 'resource1.json', expect: 'Hello, Breakfast!'},
                 {url: 'resource2.json', expect: 'I tawt I taw a puddy tat!'},
                 {url: 'resource3.json', expect: null},
+                {type: 'ajax', method: 'get', url: 'resource1.json', expect: 'Hello, Breakfast!'},
             ]
             
             tests.forEach(function(test, index){
@@ -37,14 +38,29 @@
         function perform(remote, tests, index){
 
             var test = tests[index];
-            return remote.load(test.url).done(function(data) {
+            
+            if (test.type == 'ajax') {
 
-                report(tests, index, data.message);
+                return remote.ajax(test.method, test.url).done(function(data) {
 
-            }).fail(function(error){
+                    report(tests, index, data.message);
 
-                report(tests, index, undefined);
-            }); 
+                }).fail(function(error){
+
+                    report(tests, index, undefined);
+                }); 
+            }
+            else {
+
+                return remote.load(test.url).done(function(data) {
+
+                    report(tests, index, data.message);
+
+                }).fail(function(error){
+
+                    report(tests, index, undefined);
+                }); 
+            }
         }
 
         function report(tests, index, text) {

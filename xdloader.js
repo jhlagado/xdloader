@@ -120,25 +120,22 @@
             return def.promise();
         }
         
-        this.ajax = function(method, path, data, headers) {
+        this.ajax = function(method, path, data) {
             if (!this.source)
                 return;
+
             var id = String(Date.now());    
-            var def = deferreds[path];
-            if (!def) {
-                def = $.Deferred();
-                deferreds[path1] = def;
-                var msg = {
-                    command: 'ajax',
-                    id: id,
-                    method: method,
-                    path: path,
-                    data: data,
-                };
-                if (headers) msg.headers = headers;
-                
-                this.source.postMessage(JSON.stringify(msg), origin);
+            var def = $.Deferred();
+            deferreds[id] = def;
+            var msg = {
+                command: 'ajax',
+                id: id,
+                method: method,
+                path: path,
+                data: data,
             }
+
+            this.source.postMessage(JSON.stringify(msg), origin);
             return def.promise();
         }
 
