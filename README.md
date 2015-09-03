@@ -14,23 +14,24 @@ on JQuery at some future stage.)
 In your code you need to create a remote object for each remote server needed 
 by your app. Once you have a remote you can ask it to load JSON files from that domain
 
-xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html')
 
-.done(function(remote) {
 
-    return remote.get('resource1.json')
+         xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
 
-        .done(function(data) {
+        .done(function(remote) {
+
+            return remote.get('resource1.json')
+            .done(function(response) {
 
             console.log(data.message);
         }
         .fail(function(error){
 
             console.error('ERROR: ' + error);
-        })
-}        
+            })
+        });
 
 
 See demo:
 
-http://jhlagado.github.io/xdloader/ 
+https://jsfiddle.net/jhlagado/7hgdoj0z/
