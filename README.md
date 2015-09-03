@@ -1,18 +1,19 @@
 # xdloader
-Cross-domain JSON loader
+Cross-domain AJAX loader
 
 This library retrieves JSON from servers anywhere on the web without 
-running into the same-origin policy restriction in web browsers. 
+running into the same-origin policy restriction in web browsers. It works
+without the need for a server-side proxy by using the HTML5 postMessage() api.
 
-To use you need to set up a remote server to host your JSON files. 
-On that domain you also need to also host a copy of the file xdremote.html
+To use xdloader you need to set up a host for your files. 
+On that domain you also need to also to place a copy of the file xdremote.html
 
-In your apps code you just need to include xdloader.js and jquery. 
-(Note: The xdloader library just uses JQuery for promises. I may remove this dependency 
+In your app code simply just need to include xdloader.js and jquery. 
+(Note: The xdloader library uses JQuery for promises. I may remove this dependency 
 on JQuery at some future stage.) 
 
-In your code you need to create a remote object for each remote server needed 
-by your app. Once you have a remote you can ask it to load JSON files from that domain
+To retrieve files, you create a "remote" object (one for each remote domain). 
+Once created, you this to retrieve remote files from that domain.
 
 
 
