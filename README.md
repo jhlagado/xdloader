@@ -16,7 +16,7 @@ To retrieve files, you create a "remote" object (one for each remote domain).
 Once created, you this to retrieve remote files from that domain.
 
 
-
+```javascript
          xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
 
             .done(function(response) {
@@ -25,9 +25,9 @@ Once created, you this to retrieve remote files from that domain.
             })
             .fail(function(error){
 
-                console.log('ERROR: ' + error);
+                console.log('ERROR: ' + error); 
             })
-
+```
 
 See demo:
 
