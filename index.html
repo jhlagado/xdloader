@@ -37,9 +37,11 @@
 
         function perform(remote, tests, test){
 
-            (test.method == 'get' ? remote.get(test.url) : remote.post(test.url, test.data))
+            var promise = test.method == 'get' ? 
+                remote.get(test.url, true) : 
+                remote.post(test.url, test.data, true);
             
-            .done(function(data) {
+            promise.done(function(data) {
 
                 reportajax(tests, test, data);
 
