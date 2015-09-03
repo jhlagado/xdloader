@@ -28,4 +28,4 @@ xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html')
 
 See demo:
 
-http://jhlagado.github.io/xdloader/
+http://jhlagado.github.io/xdloader/ 
