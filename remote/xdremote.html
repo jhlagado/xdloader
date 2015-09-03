@@ -52,7 +52,7 @@ window.addEventListener('message', function receiveMessage(e) {
 }, false);
 
 function postMsg(msg) {
-    window.parent.postMessage(JSON.stringify(msg), '*');
+    window.parent.postMessage(msg, '*');
 }
 
 </script>

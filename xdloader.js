@@ -31,19 +31,36 @@
             return;
         var msg = JSON.parse(e.data);
         if (msg.name === 'remoteready') {
-            if (!remote.source) {
+            if (remote.deferred) {
                 remote.source = e.source;
                 remote.deferred.resolve(remote);
+                remote.deferred = null;
             }
         } 
         else if (msg.name == 'load.response') {
-            var rc = deferreds[msg.path];
+            var def = deferreds[msg.path];
             deferreds[msg.path] = null;
-            if (rc) {
+            if (def) {
                 if (msg.result == 'ok')
-                    rc.resolve(msg.data);
+                    def.resolve(msg.data);
                 else
-                    rc.reject(msg.result);
+                    def.reject(msg.result);
+            }
+        }
+        else if (msg.name == 'ajax.response') {
+            var def = deferreds[msg.id];
+            deferreds[msg.id] = null;
+            if (def) {
+                var result = {
+                    data: msg.data,
+                    statuscode: msg.statuscode,
+                }
+                if (msg.statuscode == 200)
+                    def.resolve(result);
+                else {
+                    result.error = msg.error;
+                    def.reject(result);
+                }
             }
         }
     }, false);
@@ -63,10 +80,12 @@
         return remote.deferred;
     }
     
-    function Remote(origin, path) {
+    function Remote(origin, path, timeout) {
         
+        if (!timeout) timeout = 10000;
+
         this.deferred = $.Deferred();
-        
+
         var element = document.createElement('iframe');
         element.src = origin + path;
         element.width = '1';
@@ -76,23 +95,51 @@
         element.scrolling = 'no';
         
         body.appendChild(element);
+
+        var remote = this;
+        setTimeout(function(){
+            if (remote.deferred) {
+                remote.deferred.reject('Could not create remote');
+                remote.deferred = null;
+            }
+        }, timeout);
         
-        this.load = function(path1) {
+        this.load = function(path) {
             if (!this.source)
                 return;
-            var rc = deferreds[path1];
-            if (!rc) {
-                rc = $.Deferred();
-                deferreds[path1] = rc;
+            var def = deferreds[path];
+            if (!def) {
+                def = $.Deferred();
+                deferreds[path] = def;
                 var msg = JSON.stringify({
                     command: 'load',
-                    path: path1,
+                    path: path,
                 });
                 this.source.postMessage(msg, origin);
             }
-            return rc.promise();
+            return def.promise();
         }
         
+        this.ajax = function(method, path, data) {
+            if (!this.source)
+                return;
+            var id = String(Date.now());    
+            var def = deferreds[path];
+            if (!def) {
+                def = $.Deferred();
+                deferreds[path1] = def;
+                var msg = JSON.stringify({
+                    command: 'ajax',
+                    id: id,
+                    method: method,
+                    path: path,
+                    data: data,
+                });
+                this.source.postMessage(msg, origin);
+            }
+            return def.promise();
+        }
+
         this.destroy = function() {
             body.removeElement(remote.element);
             remotes[origin] = null;

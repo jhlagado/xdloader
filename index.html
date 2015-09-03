@@ -10,12 +10,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="xdloader.js"></script>
     <script>
+    
     $(function(){
 
-        xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html').done(function(remote) {
+        var failcount = 0;
+        var results = []; 
 
-            var failcount = 0;
-            var results = []; 
+        xdloader.create('http://jhlagado.github.io/xdloader/remote/xdremote.html')
+        .done(function(remote) {
 
             var tests = [
                 {url: 'resource1.json', expect: 'Hello, Breakfast!'},
@@ -23,78 +25,90 @@
                 {url: 'resource3.json', expect: null},
             ]
             
-            tests.forEach(function(test){
-                perform(test)
+            tests.forEach(function(test, index){
+                perform(remote, tests, index, test)
             })
 
-            function perform(test){
-                return remote.load(test.url).done(function(data) {
-
-                    report(test, data.message);
-
-                }).fail(function(error){
-
-                    report(test, undefined);
-                }); 
-            }
-
-            function report(test, text) {
-                var result = {};
-
-                if (test.expect) {
-                    result.expected = 'expect text load: ' + test.expect;
-                    result.got = text;
-                    if (test.expect == text) {
-                        result.passed = true;
-                    }
-                    else {
-                        result.passed = false;
-                        result.reason = (text == null) ? 'load failed' : 'no match';
-                    }
-                }
-                else {
-                    result.expected = 'expect no load';
-                    if (text == null) {
-                        result.got = 'no load';
-                        result.passed = true;
-                    }
-                    else {
-                        result.got = 'loaded';
-                        result.passed = false;
-                    }
-                }
-
-                if (!result.passed) failcount++;
-                test.result = result;
-                    
-                $('#output').text('');
-                tests.forEach(function(test){
-                    printResult(test)
-                })
-                print('\n');
-                if (failcount) {
-                    print('Failures:' + failcount)
-                }
-                else {
-                    print('Success!!');
-                }
-            }
-
-            function printResult(test){
-                if (!test.result) return;
-                print('\n"' + test.url + '"')
-                print('expected: ' + test.result.expected)
-                print('got: ' + test.result.got)
-                print('passed: ' + test.result.passed)
-                if (test.result.reason) print('reason: ' + test.result.reason)
-            }
-
-            function print(text){
-                var output = $('#output').text();
-                $('#output').text(output + text + '\n')
-            }
-
         })
+        .fail(function(error) {
+            print(error);
+        });
+
+        function perform(remote, tests, index){
+
+            var test = tests[index];
+            return remote.load(test.url).done(function(data) {
+
+                report(tests, index, data.message);
+
+            }).fail(function(error){
+
+                report(tests, index, undefined);
+            }); 
+        }
+
+        function report(tests, index, text) {
+
+            var test = tests[index];
+            var result = {};
+
+            if (test.expect) {
+                result.expected = 'expect text load: ' + test.expect;
+                result.got = text;
+                if (test.expect == text) {
+                    result.passed = true;
+                }
+                else {
+                    result.passed = false;
+                    result.reason = (text == null) ? 'load failed' : 'no match';
+                }
+            }
+            else {
+                result.expected = 'expect no load';
+                if (text == null) {
+                    result.got = 'no load';
+                    result.passed = true;
+                }
+                else {
+                    result.got = 'loaded';
+                    result.passed = false;
+                }
+            }
+
+            if (!result.passed) failcount++;
+            test.result = result;
+
+            clear();
+            tests.forEach(function(test){
+                printResult(test)
+            })
+            print('\n');
+            if (failcount) {
+                print('Failures:' + failcount)
+            }
+            else {
+                print('Success!!');
+            }
+        }
+
+        function printResult(test){
+            if (!test.result) return;
+            print('\n"' + test.url + '"')
+            print('expected: ' + test.result.expected)
+            print('got: ' + test.result.got)
+            print('passed: ' + test.result.passed)
+            if (test.result.reason) print('reason: ' + test.result.reason)
+        }
+
+        function print(text){
+            var output = $('#output').text();
+            $('#output').text(output + text + '\n')
+        }
+
+        function clear(){
+            $('#output').text('');
+        }
+
     })
     </script>
 </body>
