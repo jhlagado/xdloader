@@ -17,16 +17,27 @@ Once created, you this to retrieve remote files from that domain.
 
 
 ```javascript
+
+         //create a remote for the domain https://jhlagado.github.io/
+         //create returns a promise
+                
          xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
 
+        .done(function(remote) {
+            
+            //got remote    
+            //use it to get a file, and parse it as a JSON file 
+            
+            return remote.get('resource1.json', true)
             .done(function(response) {
 
                 console.log(response.data.message);
             })
             .fail(function(error){
 
-                console.log('ERROR: ' + error); 
+                console.log('ERROR: ' + error);
             })
+        });
 ```
 
 See demo:
