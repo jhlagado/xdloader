@@ -7,7 +7,6 @@
 <body>
     <div id="output" style="white-space:pre;"></div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="Promise.min.js"></script>
     <script src="xdloader.js"></script>
     <script>
@@ -15,7 +14,8 @@
     window.addEventListener('load', function(){
 
         var failcount = 0;
-        var results = []; 
+        var results = [];
+        var output = document.getElementById('output') 
 
         xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
         .then(function(remote) {
@@ -111,12 +111,13 @@
         }
 
         function print(text){
-            var output = $('#output').text();
-            $('#output').text(output + text + '\n')
+
+            var text0 = output.innerHtml;
+            output.innerHtml += text + '\n';
         }
 
         function clear(){
-            $('#output').text('');
+            output.innerHtml = '';
         }
 
     })
