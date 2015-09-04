@@ -19,6 +19,45 @@ https://github.com/taylorhakes/promise-polyfill
 This can be removed when JavaScript in browsers moves to version 6 
 and promises are suported natively.
 
+#API
+```javascript
+
+// creates a remote object
+// url - url to the file xdremote.html on a remote host
+// returns a promise to a Remote object
+
+xdloader.create(url)
+
+// Remote methods
+
+// GET a url
+// path - absolute of relative path to a resource on that host
+// json - optional flag to parse data as JSON. Otherwse return a string. Default value: true
+// returns a promise to a response object, file content in "data" property" 
+
+get(path, json) 
+
+// POST a url
+// path - absolute of relative path to a file on that host
+// json - optional flag to parse data as JSON. Otherwse return a string. Default value: true
+// returns a promise to a response object, file content in "data" property" 
+
+post(path, data, json) 
+
+// AJAX
+// method - http method
+// path - absolute of relative path to a file on that host
+// data - data to send
+// json - optional flag to parse data as JSON. Otherwse return a string. Default value: true
+// returns a promise to a response object, file content in "data" property" 
+
+ajax(method, path, data, json) 
+
+// destroys the remote
+
+destroy()
+```
+
 #Example
 ```javascript
 
