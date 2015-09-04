@@ -10,7 +10,7 @@ On that domain you also need to also to place a copy of the file xdremote.html
 
 In your app code simply include xdloader.js 
 
-To retrieve files, you create a "remote" object (one for each remote domain). 
+To retrieve files, you create a Remote object (one for each remote domain). 
 Once created, you this to retrieve remote files from that domain.
 
 #Promises
@@ -22,7 +22,7 @@ and promises are suported natively.
 #API
 ```javascript
 
-// creates a remote object
+// creates a Remote object
 // url - url to the file xdremote.html on a remote host
 // returns a promise to a Remote object
 
@@ -53,7 +53,7 @@ post(path, data, json)
 
 ajax(method, path, data, json) 
 
-// destroys the remote
+// destroys the Remote
 
 destroy()
 ```
