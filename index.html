@@ -111,13 +111,11 @@
         }
 
         function print(text){
-
-            var text0 = output.innerHtml;
-            output.innerHtml += text + '\n';
+            output.innerText += text + '\n';
         }
 
         function clear(){
-            output.innerHtml = '';
+            output.innerText = '';
         }
 
     })
