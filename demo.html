@@ -1,0 +1,35 @@
+    <div id="output" style="white-space:pre;"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://jhlagado.github.io/xdloader/Promise.min.js"></script>
+    <script src="https://jhlagado.github.io/xdloader/xdloader.js"></script>
+    <script>
+    
+     window.addEventListener('load', function(){
+
+         xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
+
+        .then(function(remote) {
+
+            remote.get('resource1.json', true)
+            .then(function(response) {
+
+                print(response.data.message);
+            })
+            .catch(function(error){
+
+                print('ERROR: ' + error);
+            })
+        });
+
+        function print(text){
+            var output = $('#output').text();
+            $('#output').text(output + text + '\n')
+        }
+
+        function clear(){
+            $('#output').text('');
+        }
+
+    })
+    </script>
