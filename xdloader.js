@@ -68,7 +68,7 @@
             return remote;
         remote = new Remote(origin, path);
         remotes[origin] = remote;
-        return remote.deferred;
+        return remote.deferred.promise;
     }
     
     function Remote(origin, path, timeout) {
@@ -76,7 +76,7 @@
         if (!timeout)
             timeout = 10000;
         
-        this.deferred = $.Deferred();
+        this.deferred = deferred();
         
         var element = document.createElement('iframe');
         element.src = origin + path;
@@ -111,7 +111,7 @@
             var id = String(Math.random());
             if (pending[id]) return;
             
-            var def = $.Deferred();
+            var def = deferred();
             var props = {
                 command: 'ajax',
                 id: id,
@@ -126,13 +126,30 @@
             };
             
             this.source.postMessage(JSON.stringify(props), origin);
-            return def.promise();
+            return def.promise;
         }
         
         this.destroy = function() {
             body.removeElement(remote.element);
             remotes[origin] = null;
         }
+    }
+
+//     var d = deferred();
+//     d.promise.then(function(value){
+//         console.log('success!', value);
+//     }).catch(function(error){
+//         console.log('failure', error);
+//     })
+//     d.reject(100);
+
+    function deferred() {
+        var dict = {};
+        dict.promise = new Promise(function(resolve, reject){
+            dict.resolve = resolve;
+            dict.reject = reject;
+        })
+        return dict;
     }
 
 }));

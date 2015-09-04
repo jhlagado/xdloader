@@ -23,17 +23,17 @@ Once created, you this to retrieve remote files from that domain.
                 
          xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
 
-        .done(function(remote) {
+        .then(function(remote) {
             
             //got remote    
             //use it to get a file, and parse it as a JSON file 
             
             return remote.get('resource1.json', true)
-            .done(function(response) {
+            .then(function(response) {
 
                 console.log(response.data.message);
             })
-            .fail(function(error){
+            .catch(function(error){
 
                 console.log('ERROR: ' + error);
             })

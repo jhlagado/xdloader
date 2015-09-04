@@ -8,16 +8,17 @@
     <div id="output" style="white-space:pre;"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="Promise.min.js"></script>
     <script src="xdloader.js"></script>
     <script>
     
-    $(function(){
+    window.addEventListener('load', function(){
 
         var failcount = 0;
         var results = []; 
 
         xdloader.create('https://jhlagado.github.io/xdloader/remote/xdremote.html')
-        .done(function(remote) {
+        .then(function(remote) {
 
             var tests = [
                 {method: 'post', url: 'resource1.json', data:{a:1}, expect: null},
@@ -31,7 +32,7 @@
             })
 
         })
-        .fail(function(error) {
+        .catch(function(error) {
             print(error);
         });
 
@@ -41,11 +42,12 @@
                 remote.get(test.url, true) : 
                 remote.post(test.url, test.data, true);
             
-            promise.done(function(data) {
+            promise.then(function(data) {
 
                 reportajax(tests, test, data);
 
-            }).fail(function(error){
+            })
+            .catch(function(error){
 
                 reportajax(tests, test, undefined);
             }); 
